@@ -1,8 +1,8 @@
 package com.noveogroup.algorithm;
 
 import com.noveogroup.device.Device;
+import com.sun.istack.internal.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -11,7 +11,7 @@ import java.util.Collections;
  */
 public class QuickSort implements Algorithm {
 
-    private void quicksort(Device[] devices, int low, int high) {
+    private void quicksort(@NotNull Device[] devices, int low, int high) {
         if (low < high) {
             int index = partition(devices, low, high);
             quicksort(devices, low, index);
@@ -46,8 +46,10 @@ public class QuickSort implements Algorithm {
 
     @Override
     public void sort(Device[] devices, boolean ascendingSort) {
-        quicksort(devices, 0, devices.length - 1);
-        if (!ascendingSort)
-            Collections.reverse(Arrays.asList(devices));
+        synchronized (devices) {
+            quicksort(devices, 0, devices.length - 1);
+            if (!ascendingSort)
+                Collections.reverse(Arrays.asList(devices));
+        }
     }
 }
